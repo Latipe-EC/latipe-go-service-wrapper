@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+option go_package = "notificationGrpc/";
+
+import "google/protobuf/timestamp.proto";
+
+
+service NotificationService {
+  //commands
+  rpc SendNotificationToUser(CreateNotificationRequest) returns (CreateNotificationResponse);
+  rpc SendCampaign(CreateCampaignRequest) returns (CreateCampaignResponse);
+  //query
+  rpc GetNotificationById(GetNotificationByIdRequest) returns (GetNotificationResponse);
+  rpc GetNotificationUserId(GetNotificationByUserRequest)returns (GetNotificationByUserResponse);
+
+}
+
+message CreateNotificationRequest {
+  string title = 1;
+  string body = 2;
+  string image = 3;
+  string user_id = 4;
+  int32 type = 5;
+  bool push_to_device = 6;
+}
+
+message CreateNotificationResponse {
+  string notificationId = 1;
+}
+
+message CreateCampaignRequest {
+  string notification_id = 1;
+  string title = 2;
+  string body = 3;
+  string image = 4;
+  google.protobuf.Timestamp schedule_display = 5;
+}
+
+message CreateCampaignResponse {
+  string notification_id = 1;
+}
+
+message GetNotificationByIdRequest {
+  string notification_id = 1;
+}
+
+message GetNotificationResponse {
+  NotificationResponse notification = 1;
+}
+
+message GetNotificationByUserRequest{
+  string user_id = 1;
+  int32 page = 2;
+  int32 size = 3;
+}
+
+message GetNotificationByUserResponse{
+  repeated NotificationResponse notifications = 1;
+}
+
+message NotificationResponse {
+  string id = 1;
+  string title = 2;
+  string body = 3;
+  string image = 4;
+  string owner_id = 5;
+  int32 type = 6;
+  google.protobuf.Timestamp createdAt = 7;
+  google.protobuf.Timestamp updatedAt = 8;
+}
+

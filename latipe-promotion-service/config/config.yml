@@ -1,0 +1,57 @@
+Server:
+  Name: "promotion services v1"
+  AppVersion: 1.0.1
+  ApiHeaderKey: ccfe5596a56098c7a38b06dc42d0ec409bbab643bce1ea4007b4201d26fd056d
+  BaseURI: 127.0.0.1:5010
+  RestPort: :5010
+  Mode: local
+  ReadTimeout: 5s
+  WriteTimeout: 5s
+  SSL: true
+  CtxDefaultTimeout: 5
+  ExpirationLimitTime: 30s
+
+GRPC:
+  RootApiKey: 410c25c9a9cf2c18866604919c4298c007114cb8
+  Port: :6010
+
+Mongodb:
+  ConnectionString: mongodb://localhost:27017/
+  Address:
+  Username:
+  Password:
+  DbName: latipe_promotion_db
+  ConnectTimeout: 10
+  MaxConnIdleTime:
+  MinPoolSize:
+  MaxPoolSize: 20
+
+RabbitMQ:
+  ServiceName: promotion_service
+  Connection: amqp://guest:guest@localhost:5672/
+  CreatePurchaseEvent:
+    Exchange: order_transaction_ex
+    CommitRoutingKey: order.promotion.update
+    RollbackRoutingKey: order.promotion.rollback
+    ReplyRoutingKey: order.promotion.reply
+
+  EmailEvent:
+    Exchange: email_topic_exchange
+    RoutingKey:
+
+
+AdapterService:
+  UserService:
+    AuthURL: http://localhost:8081
+    UserURL: http://localhost:8181
+    InternalKey:
+  StoreService:
+    BaseURL: http://localhost:8118
+    InternalKey:
+
+
+Metrics:
+  Username: admin
+  Password: 123123
+  Host: /metrics
+  FiberDashboard: /fiber/dashboard

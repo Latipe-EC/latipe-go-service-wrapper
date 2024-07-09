@@ -1,0 +1,64 @@
+Server:
+  Name: "Deliver Service APIs"
+  AppVersion: 1.0.1
+  ApiHeaderKey: ccfe5596a56098c7a38b06dc42d0ec409bbab643bce1ea4007b4201d26fd056d
+  BaseURI: 127.0.0.1:5005
+  RestPort: :5005
+
+  Mode: local
+  ReadTimeout: 5s
+  WriteTimeout: 5s
+  SSL: true
+  CtxDefaultTimeout: 5
+  ExpirationLimitTime: 30s
+
+VietNamLocationData:
+  ProvincePath: "./config/vietnam_location/province.json"
+  DistrictPath: "./config/vietnam_location/district.json"
+  WardPath: "./config/vietnam_location/ward.json"
+
+
+DB:
+Mongodb:
+  ConnectionString: mongodb://localhost:27017/
+  Address:
+  Username:
+  Password:
+  DbName: latipe_delivery_db
+  ConnectTimeout: 10
+  MaxConnIdleTime:
+  MinPoolSize:
+  MaxPoolSize: 20
+
+RabbitMQ:
+  ServiceName: delivery_service
+  Connection: amqp://guest:guest@localhost:5672/
+  CreatePurchaseEvent:
+    Exchange: order_transaction_ex
+    CommitRoutingKey: order.delivery.create
+    RollbackRoutingKey: order.delivery.rollback
+    ReplyRoutingKey: order.delivery.reply
+
+  EmailEvent:
+    Exchange: email_topic_exchange
+    RoutingKey: email.delivery.register
+  CartEvent:
+    Exchange:
+    RoutingKey:
+    Queue:
+
+AdapterService:
+  UserService:
+    AuthURL: http://localhost:8081
+    UserURL: http://localhost:8181
+    InternalKey:
+
+GRPC:
+  Port: :6005
+  RootAPIKey: aeceaec7eca63c4187e2ef406f4263d22b89f408
+
+Metrics:
+  MetricsURL: /metrics
+  Username: admin
+  Password: 123123
+  FiberDashboard: /fiber/dashboard

@@ -1,0 +1,118 @@
+Server:
+  KeyID: ordvn
+  Name: "Transaction service"
+  AppVersion: 1.0.0
+  BaseURI: 127.0.0.1:5020
+  RestPort: :5020
+  GrpcPort: :6020
+  Mode: local
+  ReadTimeout: 5s
+  WriteTimeout: 5s
+  SSL: true
+  CtxDefaultTimeout: 5
+  ExpirationLimitTime: 30s
+
+DB:
+  Mongodb:
+    Connection: mongodb://localhost:27017
+    DbName: latipe_transaction_db
+    Username: root
+    Password: 123123
+    ConnectTimeout: 10
+    MaxConnIdleTime:
+    MinPoolSize:
+    MaxPoolSize: 20
+
+Cache:
+  Redis:
+    Address: localhost
+    Port: 6379
+    Password:
+    DB: 9
+
+RabbitMQ:
+  ServiceName: transaction_service
+  Connection: amqp://guest:guest@localhost:5672/
+  ConsumerName: orders_service_v2
+  ProducerName: orders_service_v2
+
+  OrderTransactionExchange: order_transaction_ex
+  OrderCommitRoutingKey: order.create
+
+
+  SagaOrderEvent:
+    Exchange: order_transaction_ex
+    PublishRoutingKey: order.transaction.commit
+    ReplyRoutingKey: order.transaction.reply
+    CancelRoutingKey: order.transaction.cancel
+
+  SagaOrderProductEvent:
+    Exchange: order_transaction_ex
+    CommitRoutingKey: order.product.update
+    RollbackRoutingKey: order.product.rollback
+    ReplyRoutingKey: product.quantity.reply
+    Queue:
+
+  SagaOrderPaymentEvent:
+    Exchange: order_transaction_ex
+    CommitRoutingKey: order.payment.event
+    RollbackRoutingKey: order.payment.rollback
+    ReplyRoutingKey: order.payment.reply
+    Queue:
+
+  SagaOrderPromotionEvent:
+    Exchange: order_transaction_ex
+    CommitRoutingKey: order.promotion.update
+    RollbackRoutingKey: order.promotion.rollback
+    ReplyRoutingKey: order.promotion.reply
+    Queue:
+
+  SagaOrderDeliveryEvent:
+    Exchange: order_transaction_ex
+    CommitRoutingKey: order.delivery.create
+    RollbackRoutingKey: order.delivery.rollback
+    ReplyRoutingKey: order.delivery.reply
+    Queue:
+
+  SagaOrderEmailEvent:
+    Exchange: order_transaction_ex
+    CommitRoutingKey: order.email.create
+    RollbackRoutingKey: order.email.rollback
+    ReplyRoutingKey: order.email.reply
+    Queue:
+
+  SagaOrderCartEvent:
+    Exchange: cart_exchange
+    CommitRoutingKey: cart_routing_key
+    Queue: internal.rating
+
+
+AdapterService:
+  AuthService:
+    BaseURL: http://localhost:8081
+    InternalKey:
+  UserService:
+    UserURL: http://localhost:8181
+    InternalKey:
+  ProductService:
+    BaseURL: http://localhost:8645
+    InternalKey: fsf1AQOu6TVn+gNyjv22v9Cu/lW3HDF8QsSweKl5R6Me+rDO2Twyqkdbr8lZpRXkPL0MAcMA8AtgTrJAmSV5yA==
+  StoreService:
+    BaseURL: http://localhost:8118
+    InternalKey:
+  EmailService:
+    BaseURL: http://localhost:8181
+    InternalKey:
+  DeliveryService:
+    BaseURL: http://localhost:5005
+    InternalKey:
+  PromotionService:
+    BaseURL: http://localhost:5010
+    InternalKey:
+
+CronJob:
+  CheckingTxStatus: "@every 5m"
+
+Notify:
+  Token: 6896093391:AAHJGug3O04BZv4SxiPnbktpZf8cF1tqwQo
+  GroupAlertID: -4122205761
