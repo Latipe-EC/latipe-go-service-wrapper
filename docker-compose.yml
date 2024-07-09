@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+
+  order_service:
+    build:
+        context: ./order-service-v2
+        dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - latipe-network
+
+  email_service:
+    build:
+        context: ./latipe-email-service
+        dockerfile: Dockerfile
+    image: c97bf5889394
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - latipe-network
+
+  notification_service:
+    build:
+        context: ./latipe-notification-service
+        dockerfile: Dockerfile
+    image: a8bd40a35e66
+    ports:
+      - "5050:5050"
+      - "6050:6050"
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - latipe-network
+
+  transaction_service:
+    build:
+        context: ./latipe-transaction-service
+        dockerfile: Dockerfile
+    image: d6a2d6f5ef31
+    ports:
+      - "5020:5020"
+      - "6020:6020"
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - latipe-network
+
+  promotion_service:
+    build:
+       context: ./latipe-promotion-service
+       dockerfile: Dockerfile
+    image: e8003fcb4616
+    ports:
+      - "5010:5010"
+      - "6010:6010"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+  delivery_service:
+    build:
+        context: ./latipe-delivery-service
+        dockerfile: Dockerfile
+    image: 36c400afbd24
+    ports:
+      - "5005:5005"
+      - "6005:6005"
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - latipe-network
+
+networks:
+  latipe-network:
+    driver: bridge
